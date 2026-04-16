@@ -8,9 +8,7 @@ export const swaggerPlugin = swagger({
       description: 'Elysia.js starter template API documentation',
     },
     tags: [
-      { name: 'Health', description: 'Health check' },
-      { name: 'Auth', description: 'Authentication' },
-      { name: 'Users', description: 'User management' },
+      { name: 'Brokers', description: 'Broker management' },
     ],
   },
   path: '/swagger',

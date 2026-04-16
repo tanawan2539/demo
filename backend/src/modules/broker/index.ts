@@ -1,6 +1,6 @@
 import Elysia, { t } from 'elysia'
 import { successResponse } from '../../lib/response'
-import { list, add, update} from './model'
+import { list, add, update, brokerListResponse, brokerSingleResponse, brokerDeleteResponse } from './model'
 import * as userService from './service'
 
 export const userModule = new Elysia({ prefix: '/brokers', tags: ['Brokers'] })
@@ -12,6 +12,7 @@ export const userModule = new Elysia({ prefix: '/brokers', tags: ['Brokers'] })
     },
     {
       query: list,
+      response: { 200: brokerListResponse },
       detail: { summary: 'ดึงข้อมูล brokers' },
     },
   )
@@ -23,6 +24,7 @@ export const userModule = new Elysia({ prefix: '/brokers', tags: ['Brokers'] })
     },
     {
       body: add,
+      response: { 200: brokerSingleResponse },
       detail: { summary: 'เพิ่ม broker' },
     }
   )
@@ -34,6 +36,7 @@ export const userModule = new Elysia({ prefix: '/brokers', tags: ['Brokers'] })
     },
     {
       body: update,
+      response: { 200: brokerSingleResponse },
       detail: { summary: 'อัปเดต broker' },
     }
   )
@@ -44,6 +47,7 @@ export const userModule = new Elysia({ prefix: '/brokers', tags: ['Brokers'] })
       return successResponse(result)
     },
     {
+      response: { 200: brokerSingleResponse },
       detail: { summary: 'รายละเอียด broker (by slug)' },
     }
   )
@@ -54,6 +58,7 @@ export const userModule = new Elysia({ prefix: '/brokers', tags: ['Brokers'] })
       return successResponse(result)
     },
     {
+      response: { 200: brokerDeleteResponse },
       detail: { summary: 'ลบ broker (soft delete)' },
     }
   )

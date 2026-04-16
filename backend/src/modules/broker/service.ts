@@ -218,6 +218,11 @@ export async function update(id: number, body: any) {
     updateData.broker_type = body.broker_type
   }
 
+  // ถ้าไม่มี field ใดเปลี่ยนเลย ส่งข้อมูลเดิมกลับไปโดยไม่บันทึก event
+  if (Object.keys(updateData).length === 0) {
+    return existing
+  }
+
   const events = normalizeEvents(existing.events)
   events.push({
     data: body,

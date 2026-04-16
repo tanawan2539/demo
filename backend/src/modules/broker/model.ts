@@ -73,8 +73,8 @@ export const update = t.Object({
   name: t.Optional(t.String({ minLength: 1 })),
   slug: t.Optional(t.String({ minLength: 1 })),
   description: t.Optional(t.String({ minLength: 1 })),
-  logo_url: t.Optional(t.String({ format: 'uri' })),
-  website: t.Optional(t.String({ format: 'uri' })),
+  logo_url: t.Optional(t.String({ format: 'uri', minLength: 1 })),
+  website: t.Optional(t.String({ format: 'uri', minLength: 1 })),
   broker_type: t.Optional(
     t.Enum({
       cfd: 'cfd',

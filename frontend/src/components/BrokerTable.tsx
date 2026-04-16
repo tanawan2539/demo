@@ -44,9 +44,15 @@ export default function BrokerTable({ initialBrokers }: { initialBrokers: Broker
       await deleteBroker(broker.id);
       setBrokers((prev) => prev.filter((b) => b.id !== broker.id));
       alertSuccess("Deleted successfully");
+      const q = search.toLowerCase();
       const newFiltered = brokers
         .filter((b) => b.id !== broker.id)
-        .filter((b) => b.name.toLowerCase().includes(search.toLowerCase()));
+        .filter(
+          (b) =>
+            b.name.toLowerCase().includes(q) ||
+            b.slug.toLowerCase().includes(q) ||
+            b.broker_type.toLowerCase().includes(q)
+        );
       const newTotal = Math.ceil(newFiltered.length / PAGE_SIZE);
       if (page > newTotal && newTotal > 0) setPage(newTotal);
     } catch (err) {

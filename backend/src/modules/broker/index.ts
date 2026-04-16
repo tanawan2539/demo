@@ -7,7 +7,7 @@ export const userModule = new Elysia({ prefix: '/brokers', tags: ['Brokers'] })
   .get(
     '/',
     async ({ query }) => {
-      const result = await userService.list(query.page, query.limit, query.search)
+      const result = await userService.list(query.page, query.limit, query.search, query.type)
       return successResponse(result)
     },
     {

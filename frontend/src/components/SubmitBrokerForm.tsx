@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { addBroker } from "@/lib/api.client";
+import { alertSuccess } from "@/lib/swal";
 
 const BROKER_TYPES = [
   { value: "cfd", label: "CFD" },
@@ -37,6 +38,7 @@ export default function SubmitBrokerForm() {
     setLoading(true);
     try {
       await addBroker(form);
+      await alertSuccess("Broker submitted successfully!");
       router.push("/");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -68,7 +70,6 @@ export default function SubmitBrokerForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* Error — แสดงเหนือ form card */}
       {error && (
         <div
           className="flex items-start gap-3 px-4 py-3 rounded-lg mb-4 text-sm"

@@ -24,7 +24,7 @@ export interface BrokerListResult {
   };
 }
 
-// ── GET /brokers (client-side for infinite scroll) ────────────────────────────
+// ── GET /brokers ──────────────────────────────────────────────────────────────
 export async function getBrokersClient(params: {
   page?: number;
   limit?: number;
@@ -57,9 +57,31 @@ export async function addBroker(body: {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-
   const json = await res.json();
-  if (!res.ok)
-    throw new Error(json.error?.message ?? "Failed to submit broker");
+  if (!res.ok) throw new Error(json.error?.message ?? "Failed to submit broker");
   return json;
+}
+
+// ── PUT /brokers/:id ──────────────────────────────────────────────────────────
+export async function updateBroker(
+  id: number,
+  body: Partial<Omit<Broker, "id" | "created_at">>
+): Promise<{ data: Broker }> {
+  const res = await fetch(`${API_URL}/brokers/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message ?? "Failed to update broker");
+  return json;
+}
+
+// ── DELETE /brokers/:id ───────────────────────────────────────────────────────
+export async function deleteBroker(id: number): Promise<void> {
+  const res = await fetch(`${API_URL}/brokers/${id}`, {
+    method: "DELETE",
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error?.message ?? "Failed to delete broker");
 }

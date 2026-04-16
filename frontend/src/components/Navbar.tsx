@@ -6,6 +6,7 @@ import { useState } from "react";
 const navLinks = [
   { href: "/", label: "Brokers" },
   { href: "/brokers/add", label: "Submit Broker" },
+  { href: "/manage", label: "Manage" },
 ];
 
 export default function Navbar({ active }: { active?: string }) {

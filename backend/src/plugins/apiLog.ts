@@ -1,4 +1,3 @@
-import Elysia from 'elysia'
 import { db as knexDb } from '../db/knex'
 import timezone from 'moment-timezone'
 
@@ -179,10 +178,6 @@ function resolveLogResponse(ctx: AfterCtx): unknown {
   return safeJsonb(raw)
 }
 
-/**
- * บันทึกลงตาราง `log_api` ตามคอลัมน์จริง (log_api_*)
- * log_api_body / log_api_response มาจาก Elysia context (body, responseValue) และสำรองอ่าน raw จาก clone
- */
 export function onRequestLog({ request }: { request: Request }): void {
   requestStartTimes.set(request, Date.now())
   scheduleRawBodyRead(request)
@@ -221,11 +216,5 @@ export async function onAfterHandleLog(ctx: AfterCtx): Promise<void> {
     log_api_updated_at: timezone.tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss'),
   }
 
-  console.log('[apiLog] inserting row:', row.log_api_path)
-  await knexDb('log_api')
-    .insert(row)
-    .then(() => console.log('[apiLog] insert ok'))
-    .catch((err: unknown) => {
-      console.error('[apiLog] insert failed:', err)
-    })
+  await knexDb('log_api').insert(row);
 }

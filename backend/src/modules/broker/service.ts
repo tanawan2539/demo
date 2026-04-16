@@ -59,6 +59,8 @@ export async function list(
 
   //คำค้นหา
   if (search) {
+    console.log(search);
+    
     query.where((qb) => {
       qb.whereILike('name', `%${search}%`)
         .orWhereILike('slug', `%${search}%`)

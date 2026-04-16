@@ -9,7 +9,7 @@ export const brokerItem = t.Object({
   logo_url: t.String({ description: 'URL โลโก้' }),
   website: t.String({ description: 'URL เว็บไซต์' }),
   broker_type: t.String({ description: 'ประเภท broker', enum: ['cfd', 'bond', 'stock', 'crypto'] }),
-  created_at: t.String({ description: 'วันที่สร้าง' }),
+  created_at: t.Union([t.String(), t.Date()], { description: 'วันที่สร้าง' }),
 })
 
 export const brokerSingleResponse = t.Object({

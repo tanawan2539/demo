@@ -6,7 +6,6 @@ import { Elysia } from 'elysia'
 import { env } from './config/env'
 import { uploadsDir } from './config/paths'
 import { userModule } from './modules/broker'
-import { onAfterHandleLog, onRequestLog } from './plugins/apiLog'
 import { corsPlugin } from './plugins/cors'
 import { loggerPlugin } from './plugins/logger'
 import { responseWrapperPlugin } from './plugins/responseWrapper'
@@ -20,8 +19,6 @@ const app = new Elysia()
   .use(staticPlugin({ assets: uploadsDir, prefix: '/uploads' }))
   .use(loggerPlugin)
   .use(responseWrapperPlugin)
-  .onRequest(onRequestLog)
-  .onAfterHandle(onAfterHandleLog)
   .use(userModule)
   .listen(env.PORT, () => {
     console.log(`Server running at http://localhost:${env.PORT}`)

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 
 const FILTERS = [
   { value: "all", label: "All Partners" },
@@ -22,9 +22,12 @@ export default function BrokerFilterBar({
   const searchParams = useSearchParams();
   const [search, setSearch] = useState(activeSearch ?? "");
   const [isPending, startTransition] = useTransition();
+  // ใช้ ref ระบุว่า search เปลี่ยนจาก user พิมพ์ ไม่ใช่จาก URL sync
+  const isUserInput = useRef(false);
 
-  // sync input เมื่อ URL เปลี่ยน (เช่น กด back/forward)
+  // sync input เมื่อ URL เปลี่ยน (เช่น กด back/forward / เปลี่ยน filter)
   useEffect(() => {
+    isUserInput.current = false;
     setSearch(activeSearch ?? "");
   }, [activeSearch]);
 
@@ -52,11 +55,12 @@ export default function BrokerFilterBar({
     [router, searchParams]
   );
 
-  // auto-search debounce 400ms
+  // debounce 500ms — ยิง API เฉพาะเมื่อ user พิมพ์เอง ไม่ยิงซ้ำเมื่อ URL sync
   useEffect(() => {
+    if (!isUserInput.current) return;
     const timer = setTimeout(() => {
       updateUrl(activeType || "all", search || undefined);
-    }, 400);
+    }, 500);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
@@ -101,7 +105,10 @@ export default function BrokerFilterBar({
         <input
           type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            isUserInput.current = true;
+            setSearch(e.target.value);
+          }}
           placeholder="Find brokers by name, Slug"
           className="flex-1 bg-transparent text-sm outline-none"
           style={{ color: "#e2e8f0" }}
@@ -110,7 +117,10 @@ export default function BrokerFilterBar({
         {search && (
           <button
             type="button"
-            onClick={() => setSearch("")}
+            onClick={() => {
+              isUserInput.current = true;
+              setSearch("");
+            }}
             className="flex-shrink-0 transition-colors"
             style={{ color: "#4a6a8a" }}
           >

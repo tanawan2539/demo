@@ -4,27 +4,49 @@ import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const SITE_NAME = "Woxa";
+const DEFAULT_TITLE = "Woxa — Institutional Broker Network";
+const DEFAULT_DESCRIPTION =
+  "Access global liquidity through our curated network of elite financial institutions and market makers.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
-  ),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Woxa — Institutional Broker Network",
-    template: "%s | Woxa",
+    default: DEFAULT_TITLE,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "Access global liquidity through our curated network of elite financial institutions and market makers.",
-  keywords: ["broker", "institutional", "CFD", "bonds", "stocks", "crypto"],
+  description: DEFAULT_DESCRIPTION,
+  keywords: ["broker", "institutional", "CFD", "bonds", "stocks", "crypto", "forex", "liquidity"],
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
-    siteName: "Woxa",
-    title: "Woxa — Institutional Broker Network",
-    description:
-      "Access global liquidity through our curated network of elite financial institutions and market makers.",
+    siteName: SITE_NAME,
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    url: "/",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: DEFAULT_TITLE,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Woxa — Institutional Broker Network",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
 };
 

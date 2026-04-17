@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Submit Broker",
   description:
     "Register a new institutional entity within the Woxa ecosystem. Please ensure all data points align with regulatory documentation.",
+  alternates: { canonical: "/brokers/add" },
   openGraph: {
     title: "Submit Broker | Woxa",
     description:
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 export default function AddBrokerPage() {
   return (
     <div className="flex flex-col min-h-screen" style={{ backgroundColor: "#0a1526" }}>
-      <Navbar active="Brokers" />
+      <Navbar active="Submit Broker" />
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12">
         {/* Header */}

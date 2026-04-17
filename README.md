@@ -65,7 +65,7 @@ docker compose down
 ```env
 PORT=1001
 NODE_ENV=development
-DATABASE_URL=postgresql://postgres:<password>@localhost:5433/demo
+DATABASE_URL=postgresql://postgres:<password>@localhost:5432/demo
 ```
 
 รัน migration:

@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "12345678"
+      POSTGRES_DB: demo
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d demo"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://postgres:12345678@postgres:5432/demo
+    command: ["bun", "run", "db:migrate"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      PORT: 1001
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:12345678@postgres:5432/demo
+    ports:
+      - "1001:1001"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:1001
+    restart: unless-stopped
+    environment:
+      API_URL: http://backend:1001
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

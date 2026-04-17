@@ -72,7 +72,7 @@ export default async function HomePage({ searchParams }: PageProps) {
       />
       <Navbar active="brokers" />
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12">
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-12">
         {/* Hero */}
         <HeroSection />
 

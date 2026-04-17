@@ -21,7 +21,7 @@
 ```
 demo/
 ├── frontend/        # Next.js app (port 3000)
-├── backend/         # Elysia.js API (port 1001)
+├── backend/         # Bun + Elysia.js API (port 1001)
 └── docker-compose.yml
 ```
 

@@ -2,15 +2,23 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useLang } from "@/context/LangContext";
 
-const navLinks = [
-  { href: "/", label: "Brokers" },
-  { href: "/brokers/add", label: "Submit Broker" },
-  { href: "/manage", label: "Manage" },
-];
+const NAV_LINKS = [
+  { href: "/", key: "brokers" },
+  { href: "/brokers/add", key: "submitBroker" },
+  { href: "/manage", key: "manage" },
+] as const;
 
 export default function Navbar({ active }: { active?: string }) {
   const [open, setOpen] = useState(false);
+  const { lang, setLang, t } = useLang();
+
+  const navLabels: Record<string, string> = {
+    brokers: t.nav.brokers,
+    submitBroker: t.nav.submitBroker,
+    manage: t.nav.manage,
+  };
 
   return (
     <nav
@@ -27,10 +35,10 @@ export default function Navbar({ active }: { active?: string }) {
           Woxa
         </Link>
 
-        {/* Desktop links */}
+        {/* Desktop links + lang toggle */}
         <div className="hidden sm:flex items-center gap-7">
-          {navLinks.map((link) => {
-            const isActive = active === link.label;
+          {NAV_LINKS.map((link) => {
+            const isActive = active === link.key;
             return (
               <Link
                 key={link.href}
@@ -41,10 +49,31 @@ export default function Navbar({ active }: { active?: string }) {
                     : "text-slate-400 hover:text-white"
                 }`}
               >
-                {link.label}
+                {navLabels[link.key]}
               </Link>
             );
           })}
+
+          {/* Language toggle */}
+          <div
+            className="flex items-center rounded overflow-hidden"
+            style={{ border: "1px solid #1e3a56" }}
+          >
+            {(["en", "th"] as const).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                className="px-2.5 py-1 text-xs font-semibold uppercase tracking-wider transition-colors"
+                style={
+                  lang === l
+                    ? { backgroundColor: "#1e3f6e", color: "#ffffff" }
+                    : { backgroundColor: "transparent", color: "#64748b" }
+                }
+              >
+                {l}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Mobile hamburger */}
@@ -83,8 +112,8 @@ export default function Navbar({ active }: { active?: string }) {
           className="sm:hidden border-t px-4 py-3 flex flex-col gap-1"
           style={{ borderColor: "#1e3a56", backgroundColor: "#0a1526" }}
         >
-          {navLinks.map((link) => {
-            const isActive = active === link.label;
+          {NAV_LINKS.map((link) => {
+            const isActive = active === link.key;
             return (
               <Link
                 key={link.href}
@@ -93,10 +122,28 @@ export default function Navbar({ active }: { active?: string }) {
                 className="py-3 text-sm font-medium transition-colors"
                 style={{ color: isActive ? "#ffffff" : "#94a3b8" }}
               >
-                {link.label}
+                {navLabels[link.key]}
               </Link>
             );
           })}
+
+          {/* Mobile lang toggle */}
+          <div className="flex items-center gap-2 pt-3 border-t mt-1" style={{ borderColor: "#1e3a56" }}>
+            {(["en", "th"] as const).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                className="px-3 py-1 rounded text-xs font-semibold uppercase tracking-wider transition-colors"
+                style={
+                  lang === l
+                    ? { backgroundColor: "#1e3f6e", color: "#ffffff", border: "1px solid #3b72b8" }
+                    : { backgroundColor: "transparent", color: "#64748b", border: "1px solid #1e3a56" }
+                }
+              >
+                {l}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </nav>

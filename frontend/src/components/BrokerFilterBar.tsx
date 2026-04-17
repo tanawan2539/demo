@@ -2,14 +2,8 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { useLang } from "@/context/LangContext";
 
-const FILTERS = [
-  { value: "all", label: "All Partners" },
-  { value: "cfd", label: "CFD" },
-  { value: "bond", label: "Bond" },
-  { value: "stock", label: "Stock" },
-  { value: "crypto", label: "Crypto" },
-];
 
 export default function BrokerFilterBar({
   activeType,
@@ -20,7 +14,16 @@ export default function BrokerFilterBar({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useLang();
   const [search, setSearch] = useState(activeSearch ?? "");
+
+  const FILTERS = [
+    { value: "all", label: t.filter.all },
+    { value: "cfd", label: "CFD" },
+    { value: "bond", label: "Bond" },
+    { value: "stock", label: "Stock" },
+    { value: "crypto", label: "Crypto" },
+  ];
   const [isPending, startTransition] = useTransition();
   // ใช้ ref ระบุว่า search เปลี่ยนจาก user พิมพ์ ไม่ใช่จาก URL sync
   const isUserInput = useRef(false);
@@ -109,7 +112,7 @@ export default function BrokerFilterBar({
             isUserInput.current = true;
             setSearch(e.target.value);
           }}
-          placeholder="Find brokers by name, Slug"
+          placeholder={t.filter.placeholder}
           className="flex-1 bg-transparent text-sm outline-none"
           style={{ color: "#e2e8f0" }}
         />
@@ -139,7 +142,7 @@ export default function BrokerFilterBar({
           className="text-xs font-semibold tracking-widest uppercase flex-shrink-0"
           style={{ color: "#4a6a8a" }}
         >
-          Asset Focus:
+          {t.filter.assetFocus}
         </span>
         <div className="flex items-center gap-2 flex-shrink-0">
           {FILTERS.map((f) => {

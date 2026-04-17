@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { addBroker } from "@/lib/api.client";
 import { alertSuccess } from "@/lib/swal";
+import { useLang } from "@/context/LangContext";
 
 const BROKER_TYPES = [
   { value: "cfd", label: "CFD" },
@@ -14,6 +15,7 @@ const BROKER_TYPES = [
 
 export default function SubmitBrokerForm() {
   const router = useRouter();
+  const { t } = useLang();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -69,6 +71,22 @@ export default function SubmitBrokerForm() {
   };
 
   return (
+    <>
+      {/* Header */}
+      <div className="mb-6 sm:mb-8">
+        <h1
+          className="text-2xl sm:text-3xl font-bold mb-2 leading-tight"
+          style={{ color: "#ffffff", fontFamily: "Georgia, serif" }}
+        >
+          {t.submitPage.title}
+        </h1>
+        <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
+          {t.submitPage.subtitle}
+          <br />
+          {t.submitPage.subtitleSub}
+        </p>
+      </div>
+
     <form onSubmit={handleSubmit}>
       {error && (
         <div
@@ -97,7 +115,7 @@ export default function SubmitBrokerForm() {
         {/* Row 1: Name + Slug */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label style={labelStyle}>Broker Name</label>
+            <label style={labelStyle}>{t.form.brokerName}</label>
             <input
               type="text"
               required
@@ -108,7 +126,7 @@ export default function SubmitBrokerForm() {
             />
           </div>
           <div>
-            <label style={labelStyle}>Slug</label>
+            <label style={labelStyle}>{t.form.slug}</label>
             <input
               type="text"
               required
@@ -122,7 +140,7 @@ export default function SubmitBrokerForm() {
 
         {/* Row 2: Broker Type */}
         <div>
-          <label style={labelStyle}>Broker Type</label>
+          <label style={labelStyle}>{t.form.brokerType}</label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
             {BROKER_TYPES.map((t) => {
               const isActive = form.broker_type === t.value;
@@ -156,7 +174,7 @@ export default function SubmitBrokerForm() {
         {/* Row 3: Logo URL + Website */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label style={labelStyle}>Logo URL</label>
+            <label style={labelStyle}>{t.form.logoUrl}</label>
             <div className="relative">
               <span
                 className="absolute left-3 top-1/2 -translate-y-1/2"
@@ -187,7 +205,7 @@ export default function SubmitBrokerForm() {
             </div>
           </div>
           <div>
-            <label style={labelStyle}>Website</label>
+            <label style={labelStyle}>{t.form.website}</label>
             <div className="relative">
               <span
                 className="absolute left-3 top-1/2 -translate-y-1/2"
@@ -221,7 +239,7 @@ export default function SubmitBrokerForm() {
 
         {/* Row 4: Description */}
         <div>
-          <label style={labelStyle}>Broker Description</label>
+          <label style={labelStyle}>{t.form.description}</label>
           <textarea
             required
             rows={5}
@@ -242,7 +260,7 @@ export default function SubmitBrokerForm() {
           className="text-sm font-medium transition-colors"
           style={{ color: "#94a3b8" }}
         >
-          Discard Draft
+          {t.form.discard}
         </button>
         <button
           type="submit"
@@ -254,9 +272,10 @@ export default function SubmitBrokerForm() {
             color: "#ffffff",
           }}
         >
-          {loading ? "Submitting..." : "Submit Application"}
+          {loading ? t.form.submitting : t.form.submit}
         </button>
       </div>
     </form>
+    </>
   );
 }

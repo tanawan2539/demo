@@ -26,7 +26,7 @@ export default async function ManagePage() {
 
   return (
     <div className="flex flex-col min-h-screen" style={{ backgroundColor: "#0a1526" }}>
-      <Navbar active="Manage" />
+      <Navbar active="manage" />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12">
         {/* Header */}

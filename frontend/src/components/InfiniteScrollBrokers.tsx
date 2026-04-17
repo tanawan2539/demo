@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getBrokersClient, type Broker } from "@/lib/api.client";
 import BrokerCard from "./BrokerCard";
+import { useLang } from "@/context/LangContext";
 
 const LIMIT = 10;
 
@@ -19,6 +20,7 @@ export default function InfiniteScrollBrokers({
   brokerType,
   search,
 }: Props) {
+  const { t } = useLang();
   const [brokers, setBrokers] = useState<Broker[]>(initialBrokers);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(initialTotal);
@@ -69,10 +71,10 @@ export default function InfiniteScrollBrokers({
     return (
       <div className="text-center py-24">
         <p className="text-lg font-medium" style={{ color: "#64748b" }}>
-          No brokers found
+          {t.scroll.noResults}
         </p>
         <p className="text-sm mt-2" style={{ color: "#475569" }}>
-          Try adjusting your search or filter criteria
+          {t.scroll.noResultsHint}
         </p>
       </div>
     );
@@ -94,12 +96,12 @@ export default function InfiniteScrollBrokers({
               className="w-5 h-5 rounded-full border-2 animate-spin"
               style={{ borderColor: "#1e3a56", borderTopColor: "#60a5fa" }}
             />
-            <span className="text-sm">Loading more...</span>
+            <span className="text-sm">{t.scroll.loading}</span>
           </div>
         )}
         {!hasMore && brokers.length > 0 && (
           <p className="text-xs tracking-widest uppercase" style={{ color: "#2a4060" }}>
-            — End of results —
+            {t.scroll.end}
           </p>
         )}
       </div>

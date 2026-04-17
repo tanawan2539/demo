@@ -91,7 +91,7 @@ export default async function BrokerDetailPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Navbar active="Brokers" />
+      <Navbar active="brokers" />
 
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12">
         {/* Back */}

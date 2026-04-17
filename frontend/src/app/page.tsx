@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BrokerFilterBar from "@/components/BrokerFilterBar";
 import InfiniteScrollBrokers from "@/components/InfiniteScrollBrokers";
+import HeroSection from "@/components/HeroSection";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -69,22 +70,11 @@ export default async function HomePage({ searchParams }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Navbar active="Brokers" />
+      <Navbar active="brokers" />
 
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12">
         {/* Hero */}
-        <div className="mb-8 sm:mb-10">
-          <h1
-            className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-3 leading-tight"
-            style={{ color: "#ffffff" }}
-          >
-            Institutional Brokers
-          </h1>
-          <p className="text-sm sm:text-base max-w-lg leading-relaxed" style={{ color: "#94a3b8" }}>
-            Access global liquidity through our curated network of elite
-            financial institutions and market makers.
-          </p>
-        </div>
+        <HeroSection />
 
         {/* Filter bar */}
         <div className="mb-6 sm:mb-8">

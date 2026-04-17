@@ -1,24 +1,14 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import type { Broker } from "@/lib/api";
-
-const TYPE_LABEL: Record<string, string> = {
-  cfd: "TIER 1 LICENSED",
-  bond: "FCA REGULATED",
-  stock: "LOCAL REACH",
-  crypto: "CRYPTO CERTIFIED",
-};
-
-const TYPE_BADGE: Record<string, string> = {
-  cfd: "PREMIUM TIER",
-  bond: "FIXED INCOME",
-  stock: "EQUITY",
-  crypto: "DIGITAL ASSET",
-};
+import { useLang } from "@/context/LangContext";
 
 export default function BrokerCard({ broker }: { broker: Broker }) {
-  const label = TYPE_LABEL[broker.broker_type] ?? broker.broker_type.toUpperCase();
-  const badge = TYPE_BADGE[broker.broker_type] ?? "VERIFIED";
+  const { t } = useLang();
+  const label = t.card.typeLabel[broker.broker_type] ?? broker.broker_type.toUpperCase();
+  const badge = t.card.typeBadge[broker.broker_type] ?? "VERIFIED";
 
   return (
     <Link
@@ -94,7 +84,7 @@ export default function BrokerCard({ broker }: { broker: Broker }) {
             className="flex items-center gap-1 text-sm font-medium transition-colors group-hover:text-blue-300"
             style={{ color: "#60a5fa" }}
           >
-            View Details
+            {t.card.viewDetails}
             <svg
               className="w-4 h-4"
               fill="none"

@@ -40,7 +40,7 @@ export default function SubmitBrokerForm() {
     setLoading(true);
     try {
       await addBroker(form);
-      await alertSuccess("Broker submitted successfully!");
+      await alertSuccess("submitted");
       router.push("/");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");

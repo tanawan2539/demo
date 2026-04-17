@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+import translations, { type Lang } from "./translations";
 
 const MySwal = Swal.mixin({
   background: "#0f1e35",
@@ -14,26 +15,33 @@ const MySwal = Swal.mixin({
   },
 });
 
+function getLang(): Lang {
+  if (typeof window === "undefined") return "en";
+  return (localStorage.getItem("lang") as Lang) ?? "en";
+}
+
 export async function confirmDelete(name: string): Promise<boolean> {
+  const t = translations[getLang()].swal;
   const result = await MySwal.fire({
-    title: "Delete Broker?",
-    html: `<span style="color:#94a3b8">Are you sure you want to delete <strong style="color:#e2e8f0">${name}</strong>?<br/>This action cannot be undone.</span>`,
+    title: t.deleteTitle,
+    html: t.deleteHtml(name),
     icon: "warning",
     showCancelButton: true,
-    confirmButtonText: "Yes, delete",
-    cancelButtonText: "Cancel",
+    confirmButtonText: t.deleteConfirm,
+    cancelButtonText: t.deleteCancel,
     confirmButtonColor: "#dc2626",
     reverseButtons: true,
   });
   return result.isConfirmed;
 }
 
-export function alertSuccess(message: string) {
+export function alertSuccess(key: "deleted" | "updated" | "submitted") {
+  const t = translations[getLang()].swal;
   return MySwal.fire({
     icon: "success",
-    title: message,
+    title: t[key],
     showConfirmButton: true,
-    confirmButtonText: "OK",
+    confirmButtonText: t.ok,
     timer: 2500,
     timerProgressBar: true,
   });

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { deleteBroker, type Broker } from "@/lib/api.client";
 import { confirmDelete, alertSuccess } from "@/lib/swal";
 import EditBrokerModal from "./EditBrokerModal";
+import { useLang } from "@/context/LangContext";
 
 const PAGE_SIZE = 10;
 
@@ -15,6 +16,7 @@ const TYPE_COLOR: Record<string, string> = {
 };
 
 export default function BrokerTable({ initialBrokers }: { initialBrokers: Broker[] }) {
+  const { t } = useLang();
   const [brokers, setBrokers] = useState<Broker[]>(initialBrokers);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -43,7 +45,7 @@ export default function BrokerTable({ initialBrokers }: { initialBrokers: Broker
     try {
       await deleteBroker(broker.id);
       setBrokers((prev) => prev.filter((b) => b.id !== broker.id));
-      alertSuccess("Deleted successfully");
+      alertSuccess("deleted");
       const q = search.toLowerCase();
       const newFiltered = brokers
         .filter((b) => b.id !== broker.id)
@@ -64,7 +66,7 @@ export default function BrokerTable({ initialBrokers }: { initialBrokers: Broker
   const handleSaved = (updated: Broker) => {
     setBrokers((prev) => prev.map((b) => (b.id === updated.id ? updated : b)));
     setEditTarget(null);
-    alertSuccess("Broker updated successfully");
+    alertSuccess("updated");
   };
 
   const borderStyle = { borderColor: "#1e3a56" };
@@ -74,8 +76,8 @@ export default function BrokerTable({ initialBrokers }: { initialBrokers: Broker
       {/* Search + count */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <p className="text-sm" style={{ color: "#4a6a8a" }}>
-          {filtered.length} broker{filtered.length !== 1 ? "s" : ""}
-          {search && ` matching "${search}"`}
+          {filtered.length} {filtered.length !== 1 ? t.table.headers[1].toLowerCase() + "s" : t.table.headers[1].toLowerCase()}
+          {search && ` — "${search}"`}
         </p>
         <div
           className="flex items-center gap-2 rounded-lg px-3 py-2 w-full sm:w-64"
@@ -90,7 +92,7 @@ export default function BrokerTable({ initialBrokers }: { initialBrokers: Broker
             type="text"
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
-            placeholder="Search..."
+            placeholder={t.table.search}
             className="flex-1 bg-transparent text-sm outline-none"
             style={{ color: "#e2e8f0" }}
           />
@@ -110,7 +112,7 @@ export default function BrokerTable({ initialBrokers }: { initialBrokers: Broker
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr style={{ backgroundColor: "#0f1e35", borderBottom: "1px solid #1e3a56" }}>
-                {["#", "Name", "Slug", "Type", "Website", "Created", "Actions"].map((h) => (
+                {t.table.headers.map((h) => (
                   <th
                     key={h}
                     className="px-4 py-3 text-left font-semibold tracking-wider"
@@ -125,7 +127,7 @@ export default function BrokerTable({ initialBrokers }: { initialBrokers: Broker
               {paginated.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="text-center py-12" style={{ color: "#4a6a8a" }}>
-                    No records found
+                    {t.table.noRecords}
                   </td>
                 </tr>
               ) : (
@@ -185,14 +187,14 @@ export default function BrokerTable({ initialBrokers }: { initialBrokers: Broker
                             className="px-3 py-1.5 rounded text-xs font-medium transition-colors"
                             style={{ backgroundColor: "#1e3a56", color: "#94c9f0", border: "1px solid #2a4f72" }}
                           >
-                            Edit
+                            {t.table.edit}
                           </button>
                           <button
                             onClick={() => handleDelete(broker)}
                             className="px-3 py-1.5 rounded text-xs font-medium transition-colors"
                             style={{ backgroundColor: "rgba(239,68,68,0.08)", color: "#f87171", border: "1px solid rgba(239,68,68,0.2)" }}
                           >
-                            Delete
+                            {t.table.delete}
                           </button>
                         </div>
                       </td>
@@ -211,7 +213,7 @@ export default function BrokerTable({ initialBrokers }: { initialBrokers: Broker
             style={{ ...borderStyle, backgroundColor: "#0f1e35" }}
           >
             <p className="text-xs" style={{ color: "#4a6a8a" }}>
-              Page {page} of {totalPages}
+              {t.table.page} {page} {t.table.of} {totalPages}
             </p>
             <div className="flex items-center gap-1">
               <button

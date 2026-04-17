@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { getBrokers } from "@/lib/api";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BrokerTable from "@/components/BrokerTable";
+import ManageHeader from "@/components/ManageHeader";
 
 export const metadata: Metadata = {
   title: "Manage Brokers",
@@ -29,27 +29,7 @@ export default async function ManagePage() {
       <Navbar active="manage" />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
-              Manage Brokers
-            </h1>
-            <p className="text-sm mt-1" style={{ color: "#4a6a8a" }}>
-              View, edit and delete broker listings
-            </p>
-          </div>
-          <Link
-            href="/brokers/add"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors self-start sm:self-auto"
-            style={{ backgroundColor: "#1e3f6e", border: "1px solid #3b72b8", color: "#fff" }}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Add Broker
-          </Link>
-        </div>
+        <ManageHeader />
 
         {/* Error */}
         {fetchError && (

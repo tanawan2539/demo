@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { updateBroker, type Broker } from "@/lib/api.client";
+import { useLang } from "@/context/LangContext";
 
 const BROKER_TYPES = ["cfd", "bond", "stock", "crypto"] as const;
 
@@ -20,6 +21,7 @@ export default function EditBrokerModal({ broker, onClose, onSaved }: Props) {
     website: broker.website,
     description: broker.description,
   });
+  const { t } = useLang();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -87,7 +89,7 @@ export default function EditBrokerModal({ broker, onClose, onSaved }: Props) {
           className="flex items-center justify-between px-6 py-4 border-b"
           style={{ borderColor: "#1e3a56" }}
         >
-          <h2 className="text-base font-semibold text-white">Edit Broker</h2>
+          <h2 className="text-base font-semibold text-white">{t.modal.title}</h2>
           <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors"
@@ -120,19 +122,19 @@ export default function EditBrokerModal({ broker, onClose, onSaved }: Props) {
           <div className="px-6 py-5 space-y-4 max-h-[70vh] overflow-y-auto">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label style={labelStyle}>Name</label>
+                <label style={labelStyle}>{t.modal.name}</label>
                 <input type="text" required value={form.name}
                   onChange={(e) => set("name", e.target.value)} style={inputStyle} />
               </div>
               <div>
-                <label style={labelStyle}>Slug</label>
+                <label style={labelStyle}>{t.modal.slug}</label>
                 <input type="text" required value={form.slug}
                   onChange={(e) => set("slug", e.target.value)} style={inputStyle} />
               </div>
             </div>
 
             <div>
-              <label style={labelStyle}>Broker Type</label>
+              <label style={labelStyle}>{t.modal.brokerType}</label>
               <div className="grid grid-cols-4 gap-2">
                 {BROKER_TYPES.map((t) => (
                   <button
@@ -154,19 +156,19 @@ export default function EditBrokerModal({ broker, onClose, onSaved }: Props) {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label style={labelStyle}>Logo URL</label>
+                <label style={labelStyle}>{t.modal.logoUrl}</label>
                 <input type="url" required value={form.logo_url}
                   onChange={(e) => set("logo_url", e.target.value)} style={inputStyle} />
               </div>
               <div>
-                <label style={labelStyle}>Website</label>
+                <label style={labelStyle}>{t.modal.website}</label>
                 <input type="url" required value={form.website}
                   onChange={(e) => set("website", e.target.value)} style={inputStyle} />
               </div>
             </div>
 
             <div>
-              <label style={labelStyle}>Description</label>
+              <label style={labelStyle}>{t.modal.description}</label>
               <textarea required rows={3} value={form.description}
                 onChange={(e) => set("description", e.target.value)}
                 style={{ ...inputStyle, resize: "vertical" }} />
@@ -184,7 +186,7 @@ export default function EditBrokerModal({ broker, onClose, onSaved }: Props) {
               className="px-4 py-2 rounded-lg text-sm transition-colors"
               style={{ color: "#94a3b8" }}
             >
-              Cancel
+              {t.modal.cancel}
             </button>
             <button
               type="submit"
@@ -192,7 +194,7 @@ export default function EditBrokerModal({ broker, onClose, onSaved }: Props) {
               className="px-5 py-2 rounded-lg text-sm font-semibold transition-colors disabled:opacity-60"
               style={{ backgroundColor: "#1e3f6e", border: "1px solid #3b72b8", color: "#fff" }}
             >
-              {loading ? "Saving..." : "Save Changes"}
+              {loading ? t.modal.saving : t.modal.save}
             </button>
           </div>
         </form>

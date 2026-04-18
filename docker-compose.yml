@@ -16,18 +16,6 @@ services:
       timeout: 5s
       retries: 10
 
-  migrate:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    environment:
-      DATABASE_URL: postgresql://postgres:12345678@postgres:5432/demo
-    command: ["bun", "run", "db:migrate"]
-    depends_on:
-      postgres:
-        condition: service_healthy
-    restart: on-failure
-
   backend:
     build:
       context: ./backend
@@ -40,8 +28,8 @@ services:
     ports:
       - "1001:1001"
     depends_on:
-      migrate:
-        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
 
   frontend:
     build:

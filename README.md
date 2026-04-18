@@ -29,19 +29,31 @@ demo/
 
 ## วิธี Setup — Docker (แนะนำ)
 
-รันทุกอย่างด้วยคำสั่งเดียว Docker จัดการ Database + Migration + Backend + Frontend ให้อัตโนมัติ
-
 **ข้อกำหนด:** ติดตั้ง [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+### 1. Build และ Start services
 
 ```bash
 docker compose up -d --build
+```
+
+### 2. รัน Migration (ครั้งแรก หรือเมื่อมี schema ใหม่)
+
+```bash
+docker compose run --rm backend bun run db:migrate
+```
+
+### 3. (ไม่บังคับ) Seed ข้อมูลตัวอย่าง
+
+```bash
+docker compose run --rm backend bun run db:seed
 ```
 
 | Service | URL |
 |---------|-----|
 | Frontend | http://localhost:3000 |
 | Backend API | http://localhost:1001 |
-| PostgreSQL | localhost:5433 |
+| PostgreSQL | localhost:5432 |
 
 หยุดทุก service:
 ```bash
@@ -58,9 +70,33 @@ docker compose down
 - [Node.js](https://nodejs.org) >= 20
 - PostgreSQL 16
 
-### 1. Setup Database
+---
 
-สร้าง database ชื่อ `demo` ใน PostgreSQL แล้วตั้งค่า `.env` ใน `backend/`:
+### 1. สร้าง Database
+
+เปิด `psql` หรือเครื่องมืออื่น เช่น pgAdmin แล้วรันคำสั่ง:
+
+```sql
+CREATE DATABASE demo;
+```
+
+ถ้าใช้ command line:
+
+```bash
+psql -U postgres -c "CREATE DATABASE demo;"
+```
+
+> ถ้ายังไม่มี user `postgres` ให้สร้างก่อน:
+> ```sql
+> CREATE USER postgres WITH PASSWORD '<password>';
+> ALTER USER postgres CREATEDB;
+> ```
+
+---
+
+### 2. ตั้งค่า Environment — Backend
+
+สร้างไฟล์ `backend/.env`:
 
 ```env
 PORT=1001
@@ -68,14 +104,9 @@ NODE_ENV=development
 DATABASE_URL=postgresql://postgres:<password>@localhost:5432/demo
 ```
 
-รัน migration:
+---
 
-```bash
-cd backend
-bun run db:migrate
-```
-
-### 2. Install Dependencies
+### 3. Install Dependencies
 
 ```bash
 # Backend
@@ -87,7 +118,45 @@ cd ../frontend
 npm install
 ```
 
-### 3. ตั้งค่า Environment — Frontend
+---
+
+### 4. สร้าง Table
+
+เลือกวิธีใดวิธีหนึ่ง:
+
+**ตัวเลือก A — รัน Migration (แนะนำ)**
+
+```bash
+cd backend
+bun run db:migrate
+```
+
+**ตัวเลือก B — สร้าง Table ด้วย SQL โดยตรง**
+
+```bash
+psql -U postgres -d demo
+```
+
+แล้วรัน SQL นี้:
+
+```sql
+CREATE TABLE "broker" (
+    "id" SERIAL PRIMARY KEY,
+    "name" VARCHAR(250),
+    "slug" VARCHAR(250) NOT NULL,
+    "description" TEXT,
+    "logo_url" VARCHAR(250),
+    "website" VARCHAR(250),
+    "broker_type" VARCHAR(250),
+    "created_at" TIMESTAMP DEFAULT now(),
+    "events" JSONB,
+    "status_del" INTEGER DEFAULT 0
+);
+```
+
+---
+
+### 5. ตั้งค่า Environment — Frontend
 
 สร้างไฟล์ `frontend/.env`:
 
@@ -96,7 +165,9 @@ API_URL=http://localhost:1001
 NEXT_PUBLIC_API_URL=http://localhost:1001
 ```
 
-### 4. Start Project
+---
+
+### 6. Start Project
 
 เปิด 2 terminal:
 
